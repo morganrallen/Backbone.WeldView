@@ -1,9 +1,13 @@
 (function(Backbone) {
 	Backbone.WeldView = Backbone.View.extend({
-		dataElements: {},
 		initialize: function(options) {
 			if(options.container) this.container = options.container || document.createElement("div");
 			if(options.tplEl) this.tplEl = options.tplEl;
+
+			///hrmph
+			this.dataElements = {};
+
+			this.el = document.createElement("div");
 
 			var view = this;
 
@@ -23,13 +27,14 @@
 				});
 			}
 
-			this.container.appendChild(this.tplEl);
+			this.el.innerHTML = this.tplEl.outerHTML;
+			this.container.appendChild(this.el);
 
 			this.render();
 		},
 		render: function() {
 			var view = this;
-			this.weld = weld(this.tplEl, this.model.attributes, {
+			weld(this.el, this.model.attributes, {
 				map: function(parent, element, key, val) {
 					view.dataElements[key] = element;
 				}
